@@ -17,18 +17,8 @@ import fr.lamdis.ironchest.IronChest;
 public class IronChestManager {
 	
 	private static Set<Location> ironChests = new HashSet<>();
-    private static File file;
-    private static YamlConfiguration config;
-    
-    public IronChestManager() {
-        // Création du dossier de données si besoin
-        if (!IronChest.plugin.getDataFolder().exists()) {
-        	IronChest.plugin.getDataFolder().mkdirs();
-        }
-        file = new File(IronChest.plugin.getDataFolder(), "ironchests.yml");
-        config = YamlConfiguration.loadConfiguration(file);
-        loadData();
-    }
+    private static File file = new File(IronChest.plugin.getDataFolder(), "ironchests.yml");;
+    private static YamlConfiguration config = YamlConfiguration.loadConfiguration(file);
     
     public static void addIronChest(Location loc) {
         ironChests.add(loc);

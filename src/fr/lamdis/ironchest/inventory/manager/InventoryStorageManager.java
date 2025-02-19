@@ -114,7 +114,7 @@ public class InventoryStorageManager {
     
     public static void clearChest(Location loc) {
         String key = getKey(loc);
-		for (int i = 0; i < getMaxPages(loc); i++) {
+		for (int i = 1; i < getMaxPages(loc) + 1; i++) {
 			config.set(key + ".contents-" + i, null);
 		}
         try {

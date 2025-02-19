@@ -12,16 +12,14 @@ import org.bukkit.inventory.ItemStack;
 import fr.lamdis.ironchest.holder.IronChestHolder;
 
 public class ActiveChestManager {
-	private static final Map<Location, Map<Integer, Inventory>> activeChests = new HashMap<>();
+	private static final Map<Location, Inventory> activeChests = new HashMap<>();
+    private static final Map<Location, Integer> chestPages = new HashMap<>();
 
     public static Inventory getActiveChest(Location loc, int page) {
         // Recherche d'un coffre actif pour la position (en comparant les positions de blocs)
         for (Location key : activeChests.keySet()) {
             if (areLocationsEqual(key, loc)) {
-            	Map<Integer, Inventory> pages = activeChests.get(key);
-                if (pages.containsKey(page)) {
-                    return pages.get(page);
-                }
+                return activeChests.get(key);
             }
         }
         // Aucun coffre actif trouvé : création d'un inventaire live avec le contenu sauvegardé
@@ -30,7 +28,8 @@ public class ActiveChestManager {
         if (storedItems != null && storedItems.length > 0) {
             inv.setContents(storedItems);
         }
-        activeChests.computeIfAbsent(loc, k -> new HashMap<>()).put(page, inv);
+        activeChests.put(loc, inv);
+        chestPages.put(loc, page);
         return inv;
     }
 
@@ -38,10 +37,10 @@ public class ActiveChestManager {
         // Si plus aucun joueur ne consulte cet inventaire, on le supprime de la map
         for (Location key : activeChests.keySet()) {
             if (areLocationsEqual(key, loc)) {
-            	Map<Integer, Inventory> pages = activeChests.get(key);
-                pages.entrySet().removeIf(entry -> entry.getValue().getViewers().isEmpty());
-                if (pages.isEmpty()) {
+                Inventory inv = activeChests.get(key);
+                if (inv.getViewers().isEmpty()) {
                     activeChests.remove(key);
+                    chestPages.remove(key);
                 }
                 break;
             }
