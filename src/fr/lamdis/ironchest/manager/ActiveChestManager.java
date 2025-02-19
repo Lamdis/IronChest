@@ -13,7 +13,7 @@ import fr.lamdis.ironchest.holder.IronChestHolder;
 public class ActiveChestManager {
     private static final Map<Location, Inventory> activeChests = new HashMap<>();
 
-    public static Inventory getActiveChest(Location loc, InventoryStorageManager storageManager) {
+    public static Inventory getActiveChest(Location loc, InventoryStorageManager storageManager, int page) {
         // Recherche d'un coffre actif pour la position (en comparant les positions de blocs)
         for (Location key : activeChests.keySet()) {
             if (areLocationsEqual(key, loc)) {
@@ -22,7 +22,7 @@ public class ActiveChestManager {
         }
         // Aucun coffre actif trouvé : création d'un inventaire live avec le contenu sauvegardé
         Inventory inv = Bukkit.createInventory(new IronChestHolder(loc), 54, ChatColor.DARK_GRAY + "Iron Chest");
-        ItemStack[] storedItems = storageManager.loadChest(loc);
+        ItemStack[] storedItems = storageManager.loadChest(loc, page);
         if (storedItems != null && storedItems.length > 0) {
             inv.setContents(storedItems);
         }

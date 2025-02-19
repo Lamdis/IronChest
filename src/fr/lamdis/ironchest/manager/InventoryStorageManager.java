@@ -30,10 +30,10 @@ public class InventoryStorageManager {
         return loc.getWorld().getName() + "_" + loc.getBlockX() + "_" + loc.getBlockY() + "_" + loc.getBlockZ();
     }
 
-    public ItemStack[] loadChest(Location loc) {
+    public ItemStack[] loadChest(Location loc, int page) {
         String key = getKey(loc);
         // On récupère la liste sauvegardée
-        List<?> itemsList = config.getList(key + ".contents");
+        List<?> itemsList = config.getList(key + ".contents-" + page);
         // Initialise un tableau de 54 emplacements par défaut
         ItemStack[] items = new ItemStack[54];
         if (itemsList != null) {
@@ -62,7 +62,7 @@ public class InventoryStorageManager {
         return items;
     }
 
-    public void saveChest(Location loc, ItemStack[] items) {
+    public void saveChest(Location loc, ItemStack[] items, int page) {
     	String key = getKey(loc);
         List<Map<String, Object>> list = new ArrayList<>();
         // On parcourt les 54 slots et on ajoute la Map sérialisée ou null.
@@ -74,7 +74,7 @@ public class InventoryStorageManager {
                 list.add(null);
             }
         }
-        config.set(key + ".contents", list);
+        config.set(key + ".contents-" + page, list);
         try {
             config.save(file);
         } catch (IOException e) {
