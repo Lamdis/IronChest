@@ -1,11 +1,12 @@
-package fr.lamdis.ironchest.manager;
+package fr.lamdis.ironchest.inventory.manager;
 
-import org.bukkit.Bukkit;
-import org.bukkit.Location;
-import org.bukkit.inventory.Inventory;
-import org.bukkit.ChatColor;
 import java.util.HashMap;
 import java.util.Map;
+
+import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
+import org.bukkit.Location;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
 import fr.lamdis.ironchest.holder.IronChestHolder;
@@ -13,7 +14,7 @@ import fr.lamdis.ironchest.holder.IronChestHolder;
 public class ActiveChestManager {
     private static final Map<Location, Inventory> activeChests = new HashMap<>();
 
-    public static Inventory getActiveChest(Location loc, InventoryStorageManager storageManager, int page) {
+    public static Inventory getActiveChest(Location loc, int page) {
         // Recherche d'un coffre actif pour la position (en comparant les positions de blocs)
         for (Location key : activeChests.keySet()) {
             if (areLocationsEqual(key, loc)) {
@@ -22,7 +23,7 @@ public class ActiveChestManager {
         }
         // Aucun coffre actif trouvé : création d'un inventaire live avec le contenu sauvegardé
         Inventory inv = Bukkit.createInventory(new IronChestHolder(loc), 54, ChatColor.DARK_GRAY + "Iron Chest");
-        ItemStack[] storedItems = storageManager.loadChest(loc, page);
+        ItemStack[] storedItems = InventoryStorageManager.loadChest(loc, page);
         if (storedItems != null && storedItems.length > 0) {
             inv.setContents(storedItems);
         }

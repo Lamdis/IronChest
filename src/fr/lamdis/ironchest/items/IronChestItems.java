@@ -5,7 +5,6 @@ import java.net.URL;
 import java.util.UUID;
 
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.ItemStack;
@@ -16,13 +15,13 @@ import org.bukkit.profile.PlayerTextures;
 
 import fr.lamdis.ironchest.IronChest;
 
-public class IronChestItem {
+public class IronChestItems {
 	
 	private final ItemStack itemStack;
 	private final IronChest plugin;
 
-    public IronChestItem(IronChest plugin, int quantity) {
-        this.plugin = plugin;
+    public IronChestItems(int quantity) {
+        this.plugin = IronChest.plugin;
         this.itemStack = get(quantity);
     }
 	
@@ -31,7 +30,7 @@ public class IronChestItem {
         SkullMeta skullMeta = (SkullMeta) item.getItemMeta();
         if (skullMeta != null) {
             // Définir le nom custom
-            skullMeta.setDisplayName(ChatColor.GOLD + "Iron Chest");
+            skullMeta.setDisplayName("§rIron Chest");
 
             // On ajoute une métadonnée custom pour identifier l'item
             NamespacedKey key = new NamespacedKey(plugin, "iron_chest");
@@ -39,14 +38,14 @@ public class IronChestItem {
             skullMeta.getPersistentDataContainer().set(key, PersistentDataType.BYTE, (byte) 1);
             
 
-            PlayerProfile profile = Bukkit.createPlayerProfile(UUID.randomUUID(), "ironchest");
+            UUID uuid = new UUID(0, 0);
+            PlayerProfile profile = Bukkit.createPlayerProfile(uuid, "ironchest");
 
             // Obtenez les textures du profil
             PlayerTextures textures = profile.getTextures();
 
             try {
                 // Définissez la nouvelle URL de la peau
-                @SuppressWarnings("deprecation")
 				URL skinUrl = new URL("http://textures.minecraft.net/texture/f7aadff9ddc546fdcec6ed5919cc39dfa8d0c07ff4bc613a19f2e6d7f2593");
                 textures.setSkin(skinUrl);
 
@@ -57,8 +56,6 @@ public class IronChestItem {
             }
             
             skullMeta.setOwnerProfile(profile);
-            
-            // Vous pouvez aussi ajouter la texture custom via une méthode basée sur GameProfile
 
             item.setItemMeta(skullMeta);
         }
@@ -68,5 +65,5 @@ public class IronChestItem {
 	public ItemStack getItemStack() {
         return this.itemStack;
     }
-	
+
 }

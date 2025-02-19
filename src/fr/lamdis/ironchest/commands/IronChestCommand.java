@@ -7,19 +7,12 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
-import fr.lamdis.ironchest.IronChest;
-import fr.lamdis.ironchest.items.IronChestItem;
+import fr.lamdis.ironchest.items.IronChestItems;
 
 public class IronChestCommand implements CommandExecutor {
 
-	private final IronChest plugin;
-
-    public IronChestCommand(IronChest plugin) {
-        this.plugin = plugin;
-    }
-
-    @Override
-    public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
+	@Override
+	public boolean onCommand(CommandSender sender, Command cmd, String msg, String[] args) {
         // Vérifier que l'émetteur est un joueur
         if (!(sender instanceof Player)) {
             sender.sendMessage("Seul un joueur peut utiliser cette commande.");
@@ -28,13 +21,13 @@ public class IronChestCommand implements CommandExecutor {
         Player player = (Player) sender;
         
         // Création de l'item Iron Chest ( tête de joueur )
-        IronChestItem ironChestItem = new IronChestItem(plugin, 1);
+        IronChestItems ironChestItem = new IronChestItems(1);
         ItemStack ironChest = ironChestItem.getItemStack();
         
         // Donner l'item au joueur
         player.getInventory().addItem(ironChest);
         player.sendMessage(ChatColor.GREEN + "Vous avez reçu un Iron Chest !");
         return true;
-    }
+	}
 
 }

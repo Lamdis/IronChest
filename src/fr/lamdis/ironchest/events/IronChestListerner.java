@@ -12,23 +12,13 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.meta.SkullMeta;
 
-import fr.lamdis.ironchest.IronChest;
 import fr.lamdis.ironchest.holder.IronChestHolder;
-import fr.lamdis.ironchest.manager.ActiveChestManager;
-import fr.lamdis.ironchest.manager.InventoryStorageManager;
-import fr.lamdis.ironchest.manager.IronChestManager;
+import fr.lamdis.ironchest.inventory.Pages;
+import fr.lamdis.ironchest.inventory.manager.ActiveChestManager;
+import fr.lamdis.ironchest.inventory.manager.InventoryStorageManager;
+import fr.lamdis.ironchest.inventory.manager.IronChestManager;
 
 public class IronChestListerner implements Listener {
-	
-	private final IronChest plugin;
-    private final IronChestManager manager;
-    private final InventoryStorageManager storageManager;
-
-    public IronChestListerner(IronChest plugin, IronChestManager manager, InventoryStorageManager storageManager) {
-        this.plugin = plugin;
-        this.manager = manager;
-        this.storageManager = storageManager;
-    }
 
     @EventHandler
     public void onBlockPlace(BlockPlaceEvent event) {
@@ -40,7 +30,7 @@ public class IronChestListerner implements Listener {
                 SkullMeta meta = (SkullMeta) event.getItemInHand().getItemMeta();
                 if (meta.hasDisplayName() && meta.getDisplayName().contains("Iron Chest")) {
                     // Enregistrer la position du bloc comme étant un Iron Chest
-                    manager.addIronChest(block.getLocation());
+                	IronChestManager.addIronChest(block.getLocation());
                 }
             }
         }
@@ -54,9 +44,9 @@ public class IronChestListerner implements Listener {
         Block block = event.getClickedBlock();
         if (block.getType() != Material.PLAYER_HEAD) return;
         Location loc = block.getLocation();
-        if (manager.isIronChest(loc)) {
+        if (IronChestManager.isIronChest(loc)) {
             // Récupérer l'inventaire actif pour la position
-            Inventory inv = ActiveChestManager.getActiveChest(loc, storageManager);
+            Inventory inv = ActiveChestManager.getActiveChest(loc, 1);
             event.getPlayer().openInventory(inv);
             event.setCancelled(true);
         }
@@ -67,7 +57,7 @@ public class IronChestListerner implements Listener {
         if (event.getInventory().getHolder() instanceof IronChestHolder) {
         	IronChestHolder holder = (IronChestHolder) event.getInventory().getHolder();
             // Sauvegarder le contenu lors de la fermeture
-            storageManager.saveChest(holder.getChestLocation(), event.getInventory().getContents());
+            InventoryStorageManager.saveChest(holder.getChestLocation(), event.getInventory().getContents(), Pages.getActualPage(event.getInventory()));
             // Retirer le coffre actif s'il n'est plus consulté
             ActiveChestManager.removeIfEmpty(holder.getChestLocation());
         }
