@@ -27,7 +27,7 @@ public class Pages {
 				InventoryStorageManager.saveChest(holder.getChestLocation(), inv.getContents(), actualPage);
 	            ActiveChestManager.removeIfEmpty(holder.getChestLocation());
 
-	            Inventory inventory = ActiveChestManager.getActiveChest(holder.getChestLocation(), actualPage - 1);
+	            Inventory inventory = ActiveChestManager.getActiveChest(holder.getChestLocation(), actualPage + 1);
 	            player.openInventory(inventory);
 			}
 		}
@@ -48,14 +48,14 @@ public class Pages {
 	}
 	
 	public static boolean canNext(Inventory inv) {
-		if (inv.getItem(47) != null && inv.getItem(47).getType() == Material.LIME_STAINED_GLASS_PANE) {
+		if (inv.getItem(51) != null && inv.getItem(51).getType() == Material.LIME_STAINED_GLASS_PANE) {
 			return true;
 		}
 		return false;
 	}
 	
 	public static boolean canBack(Inventory inv) {
-		if (inv.getItem(51) != null && inv.getItem(51).getType() == Material.LIME_STAINED_GLASS_PANE) {
+		if (inv.getItem(47) != null && inv.getItem(47).getType() == Material.LIME_STAINED_GLASS_PANE) {
 			return true;
 		}
 		return false;
