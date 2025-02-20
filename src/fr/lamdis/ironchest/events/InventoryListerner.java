@@ -16,23 +16,6 @@ public class InventoryListerner implements Listener {
     @EventHandler
     public void onInventoryClick(InventoryClickEvent event) {
         if (event.getInventory().getHolder() instanceof IronChestHolder) {
-            IronChestHolder holder = (IronChestHolder) event.getInventory().getHolder();
-            InventoryStorageManager.saveChest(holder.getChestLocation(), event.getInventory().getContents(), Pages.getActualPage(event.getInventory()));
-        }
-    }
-    
-    // Sauvegarde également lors d'un drag sur l'inventaire
-    @EventHandler
-    public void onInventoryDrag(InventoryDragEvent event) {
-        if (event.getInventory().getHolder() instanceof IronChestHolder) {
-            IronChestHolder holder = (IronChestHolder) event.getInventory().getHolder();
-            InventoryStorageManager.saveChest(holder.getChestLocation(), event.getInventory().getContents(), Pages.getActualPage(event.getInventory()));
-        }
-    }
-    
-    @EventHandler
-    public void onInventoryClick2(InventoryClickEvent event) {
-        if (event.getInventory().getHolder() instanceof IronChestHolder) {
         	if(event.getSlot() >= 45 && event.getSlot() <= 53) {
         		if(event.getWhoClicked() instanceof Player) {
         			Player player = (Player) event.getWhoClicked();
@@ -43,7 +26,19 @@ public class InventoryListerner implements Listener {
                 	}
         		}
         		event.setCancelled(true);
+        	} else {
+                IronChestHolder holder = (IronChestHolder) event.getInventory().getHolder();
+                InventoryStorageManager.saveChest(holder.getChestLocation(), event.getInventory().getContents(), Pages.getActualPage(event.getInventory()));
         	}
+        }
+    }
+    
+    // Sauvegarde également lors d'un drag sur l'inventaire
+    @EventHandler
+    public void onInventoryDrag(InventoryDragEvent event) {
+        if (event.getInventory().getHolder() instanceof IronChestHolder) {
+            IronChestHolder holder = (IronChestHolder) event.getInventory().getHolder();
+            InventoryStorageManager.saveChest(holder.getChestLocation(), event.getInventory().getContents(), Pages.getActualPage(event.getInventory()));
         }
     }
 	
