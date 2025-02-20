@@ -1,13 +1,14 @@
 package fr.lamdis.ironchest.inventory;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
+import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
 import fr.lamdis.ironchest.holder.IronChestHolder;
 import fr.lamdis.ironchest.inventory.manager.ActiveChestManager;
-import fr.lamdis.ironchest.inventory.manager.InventoryStorageManager;
 
 public class Pages {
 	
@@ -21,30 +22,36 @@ public class Pages {
 	
 	public static void nextPage(Player player, Inventory inv) {
 		if(canNext(inv)) {
-			final int actualPage = getActualPage(inv);
 			if(inv.getHolder() instanceof IronChestHolder) {
 	        	IronChestHolder holder = (IronChestHolder) inv.getHolder();
-				InventoryStorageManager.saveChest(holder.getChestLocation(), inv.getContents(), actualPage);
-	            ActiveChestManager.removeIfEmpty(holder.getChestLocation());
-
-	            Inventory inventory = ActiveChestManager.getActiveChest(holder.getChestLocation(), actualPage + 1);
+	        	
+				final int actualPage = getActualPage(inv);
+				
+				InventoryCloseEvent event = new InventoryCloseEvent(player.getOpenInventory());
+				Bukkit.getPluginManager().callEvent(event);
+	            
+	            Inventory inventory = ActiveChestManager.getActiveChest(holder.getChestLocation(), (actualPage + 1));
 	            
 	            player.openInventory(inventory);
+	            player.updateInventory();
 			}
 		}
 	}
 	
 	public static void backPage(Player player, Inventory inv) {
 		if(canBack(inv)) {
-			final int actualPage = getActualPage(inv);
 			if(inv.getHolder() instanceof IronChestHolder) {
 	        	IronChestHolder holder = (IronChestHolder) inv.getHolder();
-				InventoryStorageManager.saveChest(holder.getChestLocation(), inv.getContents(), actualPage);
-	            ActiveChestManager.removeIfEmpty(holder.getChestLocation());
-
-	            Inventory inventory = ActiveChestManager.getActiveChest(holder.getChestLocation(), actualPage - 1);
+	        	
+				final int actualPage = getActualPage(inv);
+	        	
+				InventoryCloseEvent event = new InventoryCloseEvent(player.getOpenInventory());
+				Bukkit.getPluginManager().callEvent(event);
+	            
+	            Inventory inventory = ActiveChestManager.getActiveChest(holder.getChestLocation(), (actualPage - 1));
 	            
 	            player.openInventory(inventory);
+	            player.updateInventory();
 			}
 		}
 	}

@@ -16,7 +16,9 @@ public class InventoryListerner implements Listener {
     @EventHandler
     public void onInventoryClick(InventoryClickEvent event) {
         if (event.getInventory().getHolder() instanceof IronChestHolder) {
+            IronChestHolder holder = (IronChestHolder) event.getInventory().getHolder();
         	if(event.getSlot() >= 45 && event.getSlot() <= 53) {
+        		event.setCancelled(true);
         		if(event.getWhoClicked() instanceof Player) {
         			Player player = (Player) event.getWhoClicked();
                 	if(event.getSlot() >= 46 && event.getSlot() <= 48) {
@@ -25,9 +27,7 @@ public class InventoryListerner implements Listener {
                 		Pages.nextPage(player ,event.getInventory());
                 	}
         		}
-        		event.setCancelled(true);
         	} else {
-                IronChestHolder holder = (IronChestHolder) event.getInventory().getHolder();
                 InventoryStorageManager.saveChest(holder.getChestLocation(), event.getInventory().getContents(), Pages.getActualPage(event.getInventory()));
         	}
         }

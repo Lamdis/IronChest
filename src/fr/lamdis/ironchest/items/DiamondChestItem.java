@@ -15,12 +15,12 @@ import org.bukkit.profile.PlayerTextures;
 
 import fr.lamdis.ironchest.IronChest;
 
-public class IronChestItems {
+public class DiamondChestItem {
 	
 	private final ItemStack itemStack;
 	private final IronChest plugin;
 
-    public IronChestItems(int quantity) {
+    public DiamondChestItem(int quantity) {
         this.plugin = IronChest.plugin;
         this.itemStack = get(quantity);
     }
@@ -30,23 +30,23 @@ public class IronChestItems {
         SkullMeta skullMeta = (SkullMeta) item.getItemMeta();
         if (skullMeta != null) {
             // Définir le nom custom
-            skullMeta.setDisplayName("§rIron Chest");
+            skullMeta.setDisplayName("§rDiamond Chest");
 
             // On ajoute une métadonnée custom pour identifier l'item
-            NamespacedKey key = new NamespacedKey(plugin, "iron_chest");
+            NamespacedKey key = new NamespacedKey(plugin, "diamond_chest");
             // Ici on stocke par exemple un byte indiquant que c'est un Iron Chest
             skullMeta.getPersistentDataContainer().set(key, PersistentDataType.BYTE, (byte) 1);
             
 
             UUID uuid = new UUID(0, 0);
-            PlayerProfile profile = Bukkit.createPlayerProfile(uuid, "ironchest");
+            PlayerProfile profile = Bukkit.createPlayerProfile(uuid, "diamondchest");
 
             // Obtenez les textures du profil
             PlayerTextures textures = profile.getTextures();
 
             try {
                 // Définissez la nouvelle URL de la peau
-				URL skinUrl = new URL("http://textures.minecraft.net/texture/f7aadff9ddc546fdcec6ed5919cc39dfa8d0c07ff4bc613a19f2e6d7f2593");
+				URL skinUrl = new URL("http://textures.minecraft.net/texture/f7bf02390d3f3f4cce4bfedc3c190484138a3174d8541a8fd912ebb2147fcc0e");
                 textures.setSkin(skinUrl);
 
                 // Appliquez les modifications au profil du joueur

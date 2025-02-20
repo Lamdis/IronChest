@@ -12,46 +12,66 @@ import org.bukkit.inventory.ItemStack;
 import fr.lamdis.ironchest.holder.IronChestHolder;
 
 public class ActiveChestManager {
-	private static final Map<Location, Inventory> activeChests = new HashMap<>();
-    private static final Map<Location, Integer> chestPages = new HashMap<>();
+    private static final Map<String, Inventory> activeChests = new HashMap<>();
 
+    /**
+     * Récupère l'inventaire actif d'un Iron Chest à une page spécifique.
+     * @param loc La location du coffre.
+     * @param page La page demandée.
+     * @return L'inventaire de la page du coffre.
+     */
     public static Inventory getActiveChest(Location loc, int page) {
-        // Recherche d'un coffre actif pour la position (en comparant les positions de blocs)
-        for (Location key : activeChests.keySet()) {
-            if (areLocationsEqual(key, loc)) {
-                return activeChests.get(key);
-            }
+        String key = getChestKey(loc, page);
+
+        // Vérifie si l'inventaire de cette page est déjà chargé
+        if (activeChests.containsKey(key)) {
+            return activeChests.get(key);
         }
-        // Aucun coffre actif trouvé : création d'un inventaire live avec le contenu sauvegardé
-        Inventory inv = Bukkit.createInventory(new IronChestHolder(loc), 54, ChatColor.DARK_GRAY + "Iron Chest");
+
+        // Création d'un nouvel inventaire pour la page demandée
+        String title = "Chest (Page " + page + ")";
+		if (InventoryStorageManager.getMaxPages(loc) == 3) {
+			title = "Diamond " + title;
+        } else if(InventoryStorageManager.getMaxPages(loc) == 2) {
+			title = "Iron " + title;
+        }
+        Inventory inv = Bukkit.createInventory(new IronChestHolder(loc), 54, ChatColor.DARK_GRAY + title);
         ItemStack[] storedItems = InventoryStorageManager.loadChest(loc, page);
+
         if (storedItems != null && storedItems.length > 0) {
             inv.setContents(storedItems);
         }
-        activeChests.put(loc, inv);
-        chestPages.put(loc, page);
+
+        // Ajout du nouvel inventaire à la map avec une clé unique
+        activeChests.put(key, inv);
         return inv;
     }
 
-    public static void removeIfEmpty(Location loc) {
-        // Si plus aucun joueur ne consulte cet inventaire, on le supprime de la map
-        for (Location key : activeChests.keySet()) {
-            if (areLocationsEqual(key, loc)) {
-                Inventory inv = activeChests.get(key);
-                if (inv.getViewers().isEmpty()) {
-                    activeChests.remove(key);
-                    chestPages.remove(key);
-                }
-                break;
+    /**
+     * Supprime un coffre actif de la mémoire si personne ne l'utilise.
+     * @param loc La location du coffre.
+     * @param page La page à vérifier.
+     */
+    public static void removeIfEmpty(Location loc, int page) {
+        String key = getChestKey(loc, page);
+
+        if (activeChests.containsKey(key)) {
+            Inventory inv = activeChests.get(key);
+            
+            // Vérifie si l'inventaire n'a plus de spectateurs
+            if (inv.getViewers().isEmpty()) {
+                activeChests.remove(key);
             }
         }
     }
 
-    private static boolean areLocationsEqual(Location loc1, Location loc2) {
-        if (loc1 == null || loc2 == null) return false;
-        return loc1.getWorld().equals(loc2.getWorld())
-            && loc1.getBlockX() == loc2.getBlockX()
-            && loc1.getBlockY() == loc2.getBlockY()
-            && loc1.getBlockZ() == loc2.getBlockZ();
+    /**
+     * Génère une clé unique pour chaque page d'un coffre.
+     * @param loc La position du coffre.
+     * @param page La page actuelle.
+     * @return Une clé unique sous forme de String.
+     */
+    private static String getChestKey(Location loc, int page) {
+        return loc.getWorld().getName() + ":" + loc.getBlockX() + "," + loc.getBlockY() + "," + loc.getBlockZ() + ":" + page;
     }
 }

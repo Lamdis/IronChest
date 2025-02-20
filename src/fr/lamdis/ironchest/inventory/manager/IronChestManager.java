@@ -16,18 +16,23 @@ import fr.lamdis.ironchest.IronChest;
 
 public class IronChestManager {
 	
-	private static Set<Location> ironChests = new HashSet<>();
-    private static File file = new File(IronChest.plugin.getDataFolder(), "ironchests.yml");;
+	private static Set<Location> CHESTS = new HashSet<>();
+    private static File file = new File(IronChest.plugin.getDataFolder() + "/data/", "chests.yml");;
     private static YamlConfiguration config = YamlConfiguration.loadConfiguration(file);
     
     public static void addIronChest(Location loc) {
-        ironChests.add(loc);
+    	CHESTS.add(loc);
         InventoryStorageManager.setMaxPages(loc, 2);
+    }
+    
+    public static void addDiamondChest(Location loc) {
+        CHESTS.add(loc);
+        InventoryStorageManager.setMaxPages(loc, 3);
     }
     
     public static boolean isIronChest(Location loc) {
         // Comparaison basée sur la position bloc (entier)
-        for (Location chestLoc : ironChests) {
+        for (Location chestLoc : CHESTS) {
             if (chestLoc.getWorld().equals(loc.getWorld())
                 && chestLoc.getBlockX() == loc.getBlockX()
                 && chestLoc.getBlockY() == loc.getBlockY()
@@ -39,14 +44,14 @@ public class IronChestManager {
     }
     
     public static void removeIronChest(Location loc) {
-        ironChests.removeIf(chestLoc -> chestLoc.getWorld().equals(loc.getWorld())
+    	CHESTS.removeIf(chestLoc -> chestLoc.getWorld().equals(loc.getWorld())
             && chestLoc.getBlockX() == loc.getBlockX()
             && chestLoc.getBlockY() == loc.getBlockY()
             && chestLoc.getBlockZ() == loc.getBlockZ());
     }
     
     public static void loadData() {
-        ironChests.clear();
+    	CHESTS.clear();
         List<String> chestList = config.getStringList("chests");
         for (String s : chestList) {
             String[] parts = s.split(",");
@@ -58,7 +63,7 @@ public class IronChestManager {
                     double y = Double.parseDouble(parts[2]);
                     double z = Double.parseDouble(parts[3]);
                     Location loc = new Location(world, x, y, z);
-                    ironChests.add(loc);
+                    CHESTS.add(loc);
                 } catch (NumberFormatException e) {
                     e.printStackTrace();
                 }
@@ -68,7 +73,7 @@ public class IronChestManager {
     
     public static void saveData() {
         List<String> chestList = new ArrayList<>();
-        for (Location loc : ironChests) {
+        for (Location loc : CHESTS) {
             String s = loc.getWorld().getName() + "," + loc.getBlockX() + "," + loc.getBlockY() + "," + loc.getBlockZ();
             chestList.add(s);
         }

@@ -7,7 +7,8 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
-import fr.lamdis.ironchest.items.IronChestItems;
+import fr.lamdis.ironchest.items.DiamondChestItem;
+import fr.lamdis.ironchest.items.IronChestItem;
 
 public class IronChestCommand implements CommandExecutor {
 
@@ -20,13 +21,23 @@ public class IronChestCommand implements CommandExecutor {
         }
         Player player = (Player) sender;
         
-        // Création de l'item Iron Chest ( tête de joueur )
-        IronChestItems ironChestItem = new IronChestItems(1);
-        ItemStack ironChest = ironChestItem.getItemStack();
-        
-        // Donner l'item au joueur
-        player.getInventory().addItem(ironChest);
-        player.sendMessage(ChatColor.GREEN + "Vous avez reçu un Iron Chest !");
+		if (args[0].equalsIgnoreCase("diamond")) {
+	        // Création de l'item Iron Chest ( tête de joueur )
+	        DiamondChestItem ironChestItem = new DiamondChestItem(1);
+	        ItemStack ironChest = ironChestItem.getItemStack();
+	        
+	        // Donner l'item au joueur
+	        player.getInventory().addItem(ironChest);
+	        player.sendMessage(ChatColor.GREEN + "Vous avez reçu un Diamand Chest !");
+		} else {
+	        // Création de l'item Iron Chest ( tête de joueur )
+	        IronChestItem ironChestItem = new IronChestItem(1);
+	        ItemStack ironChest = ironChestItem.getItemStack();
+	        
+	        // Donner l'item au joueur
+	        player.getInventory().addItem(ironChest);
+	        player.sendMessage(ChatColor.GREEN + "Vous avez reçu un Iron Chest !");
+		}
         return true;
 	}
 
