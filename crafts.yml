@@ -1,0 +1,19 @@
+ironchest:
+  active: true
+  table:
+    - 'AAA'
+    - 'ABA'
+    - 'AAA'
+  ingredients:
+    A: IRON_INGOT
+    B: CHEST
+    
+diamondchest:
+  active: true
+  table:
+    - 'AAA'
+    - 'ABA'
+    - 'AAA'
+  ingredients:
+    A: DIAMOND
+    B: CHEST

@@ -1,8 +1,8 @@
 name: IronChest
-version: 1.0
+version: 1.0.0
 author: Lamdis
 main: fr.lamdis.ironchest.IronChest
-api-version: 1.21
+api-version: 1.14
 commands:
   ironchest:
     description: Commande principale du plugin IronChest
