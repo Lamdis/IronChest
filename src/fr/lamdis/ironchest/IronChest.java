@@ -7,9 +7,11 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import fr.lamdis.ironchest.commands.CommandTabCompleter;
 import fr.lamdis.ironchest.commands.IronChestCommand;
 import fr.lamdis.ironchest.events.BreakListerner;
 import fr.lamdis.ironchest.events.InventoryListerner;
+import fr.lamdis.ironchest.events.IronChestHelmetListener;
 import fr.lamdis.ironchest.events.IronChestListerner;
 import fr.lamdis.ironchest.inventory.manager.IronChestManager;
 import fr.lamdis.ironchest.recipes.IronChestRecipes;
@@ -28,6 +30,8 @@ public class IronChest extends JavaPlugin {
 	public void onEnable() {
 		plugin = this;
 		
+		saveDefaultConfig();
+		
 		SERVER = plugin.getServer();
 		
 		File craftFile = new File(getDataFolder(), "crafts.yml");
@@ -43,10 +47,12 @@ public class IronChest extends JavaPlugin {
 		IronChestManager.loadData();
         
         getCommand("ironchest").setExecutor(new IronChestCommand());
+		getCommand("ironchest").setTabCompleter(new CommandTabCompleter());
 		
 		getServer().getPluginManager().registerEvents(new InventoryListerner(), this);
 		getServer().getPluginManager().registerEvents(new IronChestListerner(), this);
 		getServer().getPluginManager().registerEvents(new BreakListerner(), this);
+		getServer().getPluginManager().registerEvents(new IronChestHelmetListener(), this);
 		
 		IronChestRecipes.registerRecipes();
 		

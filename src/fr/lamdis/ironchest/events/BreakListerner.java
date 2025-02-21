@@ -32,7 +32,7 @@ public class BreakListerner implements Listener {
         
         // Empêcher la chute automatique des items
         event.setDropItems(false);
-
+        
         // Détruire le coffre et gérer les loots
         destroyIronChest(block);
     }
@@ -66,7 +66,7 @@ public class BreakListerner implements Listener {
      * @return true si c'est un Iron Chest, sinon false.
      */
     private boolean isIronChest(Block block) {
-    	if(block.getType() == Material.PLAYER_HEAD || block.getType() == Material.PLAYER_HEAD) {
+    	if(block.getType() == Material.PLAYER_HEAD || block.getType() == Material.PLAYER_WALL_HEAD) {
     		if(IronChestManager.isIronChest(block.getLocation())) {
     	        return true;
     		}
@@ -103,6 +103,16 @@ public class BreakListerner implements Listener {
             }
         }
 
+        // Supprimer les références à ce coffre
+        for (int i = 1; i <= maxPages; i++) {
+            ActiveChestManager.removeIfEmpty(block.getLocation(), i);
+        }
+        IronChestManager.removeIronChest(block.getLocation());
+        InventoryStorageManager.clearChest(block.getLocation());
+
+        // Détruire le bloc
+        block.setType(Material.AIR);
+
         // Drop tous les items récupérés
         for (ItemStack item : droppedItems) {
             block.getWorld().dropItemNaturally(block.getLocation(), item);
@@ -116,15 +126,5 @@ public class BreakListerner implements Listener {
 			DiamondChestItem diamondChestItem = new DiamondChestItem(1);
 			block.getWorld().dropItemNaturally(block.getLocation(), diamondChestItem.getItemStack());
         }
-
-        // Supprimer les références à ce coffre
-        for (int i = 1; i <= maxPages; i++) {
-            ActiveChestManager.removeIfEmpty(block.getLocation(), i);
-        }
-        IronChestManager.removeIronChest(block.getLocation());
-        InventoryStorageManager.clearChest(block.getLocation());
-
-        // Détruire le bloc
-        block.setType(Material.AIR);
     }
 }

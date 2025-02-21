@@ -46,7 +46,7 @@ public class IronChestItem {
 
             try {
                 // Définissez la nouvelle URL de la peau
-				URL skinUrl = new URL("http://textures.minecraft.net/texture/f7aadff9ddc546fdcec6ed5919cc39dfa8d0c07ff4bc613a19f2e6d7f2593");
+				URL skinUrl = new URL(IronChest.CONFIG.getString("textures.ironchest", "http://textures.minecraft.net/texture/f7aadff9ddc546fdcec6ed5919cc39dfa8d0c07ff4bc613a19f2e6d7f2593"));
                 textures.setSkin(skinUrl);
 
                 // Appliquez les modifications au profil du joueur

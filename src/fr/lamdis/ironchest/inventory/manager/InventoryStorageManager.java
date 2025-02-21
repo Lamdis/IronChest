@@ -58,7 +58,7 @@ public class InventoryStorageManager {
                         Map<String, Object> map = (Map<String, Object>) obj;
                         items[i] = ItemStack.deserialize(map);
                     } catch (Exception e) {
-                        Bukkit.getLogger().log(Level.SEVERE, "Erreur lors de la désérialisation d'un item du coffre à la position " + key, e);
+                        Bukkit.getLogger().log(Level.SEVERE, "[IRON CHEST] ERROR : 'deserialize' " + key, e);
                         items[i] = null;
                     }
                 } else {
@@ -75,13 +75,13 @@ public class InventoryStorageManager {
 				if(page <= 1) {
 					items[i] = NewItem.simpleItem(Material.RED_STAINED_GLASS_PANE, " ");
 				} else {
-					items[i] = NewItem.simpleItem(Material.LIME_STAINED_GLASS_PANE, "§aPage précédente");
+					items[i] = NewItem.simpleItem(Material.LIME_STAINED_GLASS_PANE, "§aBack Page");
 				}
 			} else if (i >= 50 && i <= 52) {
 				if (getMaxPages(loc) == page) {
 					items[i] = NewItem.simpleItem(Material.RED_STAINED_GLASS_PANE, " ");
 				} else {
-					items[i] = NewItem.simpleItem(Material.LIME_STAINED_GLASS_PANE, "§aPage suivante");
+					items[i] = NewItem.simpleItem(Material.LIME_STAINED_GLASS_PANE, "§aNext Page");
 				}
 				
 			} else if (i == 49) {
@@ -107,7 +107,7 @@ public class InventoryStorageManager {
         try {
             config.save(file);
         } catch (IOException e) {
-            Bukkit.getLogger().log(Level.SEVERE, "Erreur lors de la sauvegarde du chest storage", e);
+            Bukkit.getLogger().log(Level.SEVERE, "[IRON CHEST] Saving chest storage ERROR", e);
         }
     }
     
@@ -119,7 +119,7 @@ public class InventoryStorageManager {
         try {
             config.save(file);
         } catch (IOException e) {
-            Bukkit.getLogger().log(Level.SEVERE, "Erreur lors de la suppression du chest storage pour le coffre " + key, e);
+            Bukkit.getLogger().log(Level.SEVERE, "[IronChest] Chest storage deleted ERROR" + key, e);
         }
     }
 }
